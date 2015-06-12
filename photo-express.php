@@ -43,7 +43,7 @@ require_once PEG_PLUGIN_PATH.'class-settings.php';
 require_once PEG_PLUGIN_PATH.'class-photo-renderer.php';
 require_once PEG_PLUGIN_PATH.'class-photo-browser.php';
 
-define('PEG_VERSION', '0.2');
+define('PEG_VERSION', '0.3');
 define('PEG_PHOTOSWIPE_VERSION', '4.0.8');
 
 if(!class_exists( 'Photo_Express' )){
@@ -97,12 +97,8 @@ if(!class_exists( 'Photo_Express' )){
 			// Hook for plugin de/activation
 			if (is_multisite()){
 				register_activation_hook( __FILE__, array (&$this->configuration, 'init_site_options' ) );
-				register_uninstall_hook( __FILE__, array (&$this->configuration, 'delete_site_options' ) );
-
 			} else {
 				register_activation_hook( __FILE__, array (&$this->configuration, 'init_options' ) );
-				register_uninstall_hook( __FILE__, array (&$this->configuration, 'delete_options' ) );
-				register_uninstall_hook(__FILE__, array(&$this->access, 'deactivate'));
 			}
 		}
         function hook_media_browser(){

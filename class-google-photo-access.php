@@ -247,7 +247,7 @@ if (!class_exists( "Google_Photo_Access" )) {
 			    $this->initialized = true;
 		    }
 	    }
-	    function deactivate(){
+	    function uninstall(){
 		    $this->revoke_authorization();
 		    delete_option('peg_oauth_settings');
 	    }

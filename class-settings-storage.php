@@ -81,8 +81,6 @@ if (!class_exists("Settings_Storage")) {
             'peg_single_video_size' => 'w400',
             'peg_single_video_size_format' => 'P',
 
-	        'peg_migrate_state' => 0,
-
 	        //Photoswipe options
 	        'peg_photoswipe_show_share_button' => '1',
 	        'peg_photoswipe_show_fullscreen_button' => '1',
@@ -90,10 +88,6 @@ if (!class_exists("Settings_Storage")) {
 	        'peg_photoswipe_show_close_button' => '1',
 	        'peg_photoswipe_show_index_position' => '1'
 
-        );
-	    private $special_migrate_mappings = array(
-	        'peg_photoswipe_caption_num' => 'peg_photoswipe_show_index_position',
-		    'peg_photoswipe_caption_dl' => 'peg_photoswipe_show_share_button'
         );
 
 	    public function get_option($name){
@@ -106,11 +100,23 @@ if (!class_exists("Settings_Storage")) {
 	    }
 
 	    private function migrate_if_possible(){
-		    //First check if the user has already saved some uptions
-		    $migration_state = get_option('peg_migrate_state');
-		    if(!isset($migration_state) || !$migration_state || $migration_state != PEG_VERSION){
-			    //No options have been saved and no migration attempt has been tried before
-			    //check for pe2 options!
+		    //First check if the user has already saved some options.
+		    $migration_state = get_option('peg_migrate_state', 0.0);
+
+
+		    $migrated = false;
+		    //Determine the previous version by evaluating 'peg_migrate_state'. Version 0.0 is picasa express 2. If $migration_state is 1 (true),
+		    // the version is version 0.1 as back then the $migration_state has just been a true/false flag. If the $migration_state is a numeric, the
+		    //version is 0.2 as the problematic situation with the $migration_state in version 0.1 has not been detected. All versions from 0.2 onwards are
+		    //labelled as "v0.3" and so on.
+		    $old_version = $migration_state === '1' ? 0.1 : (is_numeric(substr($migration_state,1)) ? substr($migration_state,1) : (is_numeric($migration_state) ? $migration_state : 0.0));
+
+		    //In version 0.1, the option 'peg_migrate_state' has been set to true after successfully migrating. Thus
+		    //we also have to perform a migration if there is something to migrate between photo express versions and
+		    //the 'peg_migrate_state' is set to true.
+		    if($old_version == 0.0){
+			    //no migration state has been set, so we've just installed this plugin. Check if photo express options
+			    //need to be migrated
 			    foreach($this->options as $key => $value){
 				    $legacy_option_value = get_option('pe2'.substr($key,3));
 				    if(isset($legacy_option_value)){
@@ -118,20 +124,41 @@ if (!class_exists("Settings_Storage")) {
 					    $this->options[$key] = $legacy_option_value;
 				    }
 			    }
-			    foreach($this->special_migrate_mappings as $oldKey => $newKey){
-				    $this->options[$newKey] = $this->options[$oldKey];
-				    unset($this->options[$oldKey]);
+			    $migrated = true;
+		    }
+		    //Migration for version 0.2
+		    if($old_version < 0.2){
+			    $photoswipe_migrate_options = array(
+				    'photoswipe_caption_num' => 'peg_photoswipe_show_index_position',
+				    'photoswipe_caption_dl' => 'peg_photoswipe_show_share_button'
+			    );
+			    $old_key_prefix = $old_version > 0.0 ? 'peg_' : 'pe2_';
+			    foreach ( $photoswipe_migrate_options as $old_key => $new_key ) {
+				    $old_key = $old_key_prefix . $old_key;
+				    $old_value = get_option( $old_key, $this->options[$new_key] );
+				    $this->options[ $new_key ] = empty($old_value) ? $this->options[$new_key] : $old_value;
 			    }
-			    $this->options['peg_migrate_state'] = PEG_VERSION;
+		    }
+		    //Migration for version 0.3
+		    if($old_version > 0.0 && $old_version < 0.3){
+			    //Check if we need to delete old options of our plugin (prefix peg).
+			    //We don't delete options of the pe2 prefix, as this is not our job. It should only be done by the picasa express 2 plugin
+			    foreach($this->options as $key => $value){
+				    delete_option($key);
+			    }
+			    $migrated = true;
+		    }
+
+
+		    if($migrated) {
 			    //Store options
 			    $this->store();
+			    //Store the migrate flag
+			    update_option('peg_migrate_state', 'v'.PEG_VERSION);
 		    }
 	    }
 	    private function store(){
-
-		    foreach($this->options as $key => $value){
-			    update_option($key,$value);
-		    }
+			update_option('peg_general_settings', $this->options);
 	    }
         /**
          * @return array
@@ -139,19 +166,23 @@ if (!class_exists("Settings_Storage")) {
         public function get_options()
         {
 	        if(!$this->initialized){
+		        $stored_options = get_option('peg_general_settings', $this->options);
+			if(isset($stored_options)){
+				$this->options = $stored_options;
+			}
 		        // -----------------------------------------------------------------------
 		        // read all of the options from the database and store them in our local
 		        // options array
-		        foreach ($this->options as $key => $option) {
-			        $this->options[$key] = get_option($key,$option);
-		        }
+
 		        if (!preg_match('/^[whs]\d+(-c)?$/',$this->options['peg_large_limit'])){
 			        $this->options['peg_large_limit'] = '';
 		        }
+
 		        $this->initialized = true;
 	        }
             return $this->options;
         }
+
 
 
 
@@ -212,8 +243,8 @@ if (!class_exists("Settings_Storage")) {
          */
         function init_options()
         {
-	        //Check for migration
-	        $this->migrate_if_possible();
+		    //Check for migration
+		    $this->migrate_if_possible();
 
             foreach (get_option('peg_roles', $this->options['peg_roles']) as $role => $data) {
                 if ($data) {
@@ -228,10 +259,8 @@ if (!class_exists("Settings_Storage")) {
          */
         function delete_options()
         {
-	        //Delete all options!
-	        foreach($this->options as $key => $value){
-		        delete_option($key);
-	        }
+			delete_option('peg_general_settings');
+	        delete_option('peg_migrate_state');
         }
 
         function parse_caption($string)
