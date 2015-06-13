@@ -89,6 +89,7 @@ if (!class_exists("Settings_Storage")) {
 	        'peg_photoswipe_show_index_position' => '1'
 
         );
+	    private $migration_state = '';
 
 	    public function get_option($name){
 		    return $this->get_options()[$name];
@@ -109,7 +110,7 @@ if (!class_exists("Settings_Storage")) {
 		    // the version is version 0.1 as back then the $migration_state has just been a true/false flag. If the $migration_state is a numeric, the
 		    //version is 0.2 as the problematic situation with the $migration_state in version 0.1 has not been detected. All versions from 0.2 onwards are
 		    //labelled as "v0.3" and so on.
-		    $old_version = $migration_state === '1' ? 0.1 : (is_numeric(substr($migration_state,1)) ? substr($migration_state,1) : (is_numeric($migration_state) ? $migration_state : 0.0));
+		    $old_version = $migration_state === '1' ? 0.1 : (preg_match('/v([0-9.]+)/',$migration_state) ? substr($migration_state,1) : (is_numeric($migration_state) ? 0.2 : 0.0));
 
 		    //In version 0.1, the option 'peg_migrate_state' has been set to true after successfully migrating. Thus
 		    //we also have to perform a migration if there is something to migrate between photo express versions and
@@ -148,14 +149,15 @@ if (!class_exists("Settings_Storage")) {
 			    }
 			    $migrated = true;
 		    }
-
-
 		    if($migrated) {
 			    //Store options
 			    $this->store();
 			    //Store the migrate flag
-			    update_option('peg_migrate_state', 'v'.PEG_VERSION);
+			    update_option('peg_migrate_state', $this->get_version_identifier());
 		    }
+	    }
+	    private function get_version_identifier(){
+		    return 'v'.PEG_VERSION;
 	    }
 	    private function store(){
 			update_option('peg_general_settings', $this->options);
@@ -165,23 +167,34 @@ if (!class_exists("Settings_Storage")) {
          */
         public function get_options()
         {
-	        if(!$this->initialized){
-		        $stored_options = get_option('peg_general_settings', $this->options);
-			if(isset($stored_options)){
-				$this->options = $stored_options;
-			}
-		        // -----------------------------------------------------------------------
-		        // read all of the options from the database and store them in our local
-		        // options array
+	        //Only load options that if we have already migrated the options to the newest level. Otherwise newly added
+	        // options will be left without default as they are overridden before migration takes place.
+	        if($this->is_migrated()) {
+		        if ( ! $this->initialized ) {
+			        $stored_options = get_option( 'peg_general_settings', $this->options );
 
-		        if (!preg_match('/^[whs]\d+(-c)?$/',$this->options['peg_large_limit'])){
-			        $this->options['peg_large_limit'] = '';
+			        if ( isset( $stored_options ) ) {
+				        $this->options = $stored_options;
+			        }
+			        // -----------------------------------------------------------------------
+			        // read all of the options from the database and store them in our local
+			        // options array
+
+			        if ( ! preg_match( '/^[whs]\d+(-c)?$/', $this->options['peg_large_limit'] ) ) {
+				        $this->options['peg_large_limit'] = '';
+			        }
+
+			        $this->initialized = true;
 		        }
-
-		        $this->initialized = true;
 	        }
-            return $this->options;
+	        return $this->options;
         }
+	    private function is_migrated(){
+		    if(empty($this->migration_state)){
+			    $this->migration_state = get_option('peg_migrate_state');
+		    }
+		    return $this->get_version_identifier() == $this->migration_state;
+	    }
 
 
 
