@@ -12,7 +12,7 @@ if (!class_exists("Photo_Browser")) {
 	     */
 	    private $admin;
 	    /**
-	     * @var $picasaAcess Google_Photo_Access
+	     * @var $picasaAcess Feed_Fetcher
 	     */
         private $picasaAccess;
 

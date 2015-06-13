@@ -86,7 +86,11 @@ if (!class_exists("Settings_Storage")) {
 	        'peg_photoswipe_show_fullscreen_button' => '1',
 	        'peg_photoswipe_show_caption' => '1',
 	        'peg_photoswipe_show_close_button' => '1',
-	        'peg_photoswipe_show_index_position' => '1'
+	        'peg_photoswipe_show_index_position' => '1',
+
+	        //Caching options
+            'peg_cache_activated' => '1',
+            'peg_cache_expiration_time' => 0
 
         );
 	    private $migration_state = '';

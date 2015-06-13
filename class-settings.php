@@ -69,10 +69,20 @@ if (!class_exists( "Settings" )) {
          */
         function settings_reg()
         {
-	        register_setting('photo-express', 'peg_general_settings');
+	        register_setting('photo-express', 'peg_general_settings', array(&$this, 'validate_update'));
 	        $this->picasaAccess->register_auth_settings();
         }
 
+	    function validate_update($input){
+		    //First make a validation
+		    if(!(is_numeric($input['peg_cache_expiration_time']) && floor($input['peg_cache_expiration_time']) == $input['peg_cache_expiration_time'] && $input['peg_cache_expiration_time'] >= 0)){
+			    add_settings_error('peg_general_settings[peg_cache_expiration_time]','cache_expiration_invalid','Only positive whole numbers are allowed for the cache expiration');
+			    //reset
+			    $input['peg_cache_expiration_time'] = $this->configuration->get_option('peg_cache_expiration_time');
+		    }
+		    return $input;
+
+	    }
         /**
          * Define misseed style for setting page
          */
@@ -918,10 +928,22 @@ jQuery('document').ready(function(){
 				</table>
 <?php
             // check to see if we're on the main settings page, and if so add the last
-            // section for advertising
+            // section for advanced and advertising
             if ($settings) {
                 // we're on main settings, add the remaining entries
                 ?>
+	            <h3><?php _e('Advanced', 'peg') ?></h3>
+	            <table class="peg-form-table">
+		            <?php
+		            $this->make_settings_row(__('Caching','peg'),
+			            '<label><input type="checkbox" id="peg_cache_activated" name="peg_general_settings[peg_cache_activated]" value="1" '. checked($this->configuration->get_option('peg_cache_activated'), '1', false) . ' />'. __('Enable Caching of Google Album feeds','peg') .'</label>',
+			            __('If activated, the answers to google API calls for albums will be cached. This dramatically increases the time to load a page with a lot of galleries. If this option is set, it will take some time for new pictures to appear in an album gallery that has already been cached. You can always reset the cache for a certain post/site by republishing the content.', 'peg'));
+		            $this->make_settings_row(__('Cache expires', 'peg'),
+			            '<input type="text" id="peg_cache_expiration_time" name="peg_general_settings[peg_cache_expiration_time]" value="'.$this->configuration->get_option('peg_cache_expiration_time').'" />'
+			            , __('The time in seconds after which a cached album feed should at least be refreshed. \'0\' means that album feeds do not need to be refreshed.', 'peg')
+		            );
+		            ?>
+	            </table>
                 <h3><?php _e('Advertising', 'peg') ?></h3>
 
                 <table class="peg-form-table">
@@ -935,6 +957,7 @@ jQuery('document').ready(function(){
                     ?>
 
                 </table>
+
             <?php
             }// end if we're on main settings page
         }// end function peg_shared_options(..)

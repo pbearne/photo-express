@@ -3,7 +3,7 @@ namespace photo_express;
 
 require_once PEG_PLUGIN_PATH.'class-settings-storage.php';
 require_once PEG_PLUGIN_PATH.'class-common.php';
-require_once PEG_PLUGIN_PATH.'class-google-photo-access.php';
+require_once PEG_PLUGIN_PATH.'class-feed-fetcher.php';
 
 if (!class_exists("Photo_Renderer")) {
     class Photo_Renderer
@@ -14,7 +14,7 @@ if (!class_exists("Photo_Renderer")) {
 	     */
         private $configuration;
 	    /**
-	     * @var $picasaAccess Google_Photo_Access
+	     * @var $picasaAccess Feed_Fetcher
 	     */
         private $picasaAccess;
         /**

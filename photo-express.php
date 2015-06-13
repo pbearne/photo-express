@@ -37,11 +37,14 @@ Copyright 2013 gjanes ( email : gcj.wordpress@janesfamily.org )
 namespace photo_express;
 define('PEG_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
+
+require_once PEG_PLUGIN_PATH.'class-feed-fetcher.php';
 require_once PEG_PLUGIN_PATH.'class-google-photo-access.php';
 require_once PEG_PLUGIN_PATH.'class-settings-storage.php';
 require_once PEG_PLUGIN_PATH.'class-settings.php';
 require_once PEG_PLUGIN_PATH.'class-photo-renderer.php';
 require_once PEG_PLUGIN_PATH.'class-photo-browser.php';
+require_once PEG_PLUGIN_PATH.'class-simple-cache.php';
 
 define('PEG_VERSION', '0.3');
 define('PEG_PHOTOSWIPE_VERSION', '4.0.8');
@@ -57,14 +60,16 @@ if(!class_exists( 'Photo_Express' )){
 		var $configuration;
 		var $access;
 		var $display;
+		var $cache;
 
 		function __construct() {
 			//Create the needed objects and hook them to wordpress
 			$this->configuration = new Settings_Storage();
-			$this->access = new Google_Photo_Access($this->configuration);
+			$this->access = new Google_Photo_Access();
+			$this->cache = new Simple_Cache($this->configuration, $this->access);
 			$this->admin = new Settings($this->configuration, $this->access);
-			$this->browser = new Photo_Browser($this->configuration, $this->access, $this->admin);
-			$this->display = new Photo_Renderer($this->configuration, $this->access);
+			$this->browser = new Photo_Browser($this->configuration, $this->cache, $this->admin);
+			$this->display = new Photo_Renderer($this->configuration, $this->cache);
 
 			//Start hooking:
 			$this->hook_activation();

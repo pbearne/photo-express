@@ -8,9 +8,11 @@ require_once plugin_dir_path(__FILE__).'class-google-photo-access.php';
 require_once plugin_dir_path(__FILE__).'class-settings-storage.php';
 
 //uninstalls the plugin and delete all options / revoking oauth access
-$photo_access = new Google_Photo_Access();
-$photo_access->uninstall();
 $configuration = new Settings_Storage();
+$photo_access = new Google_Photo_Access($configuration);
+$photo_access->uninstall();
+$cache = new Simple_Cache($configuration,$photo_access);
+$cache->clear_cache();
 if (is_multisite()){
 	$configuration->delete_site_options();
 }else{
