@@ -45,6 +45,7 @@ require_once PEG_PLUGIN_PATH.'class-settings.php';
 require_once PEG_PLUGIN_PATH.'class-photo-renderer.php';
 require_once PEG_PLUGIN_PATH.'class-photo-browser.php';
 require_once PEG_PLUGIN_PATH.'class-simple-cache.php';
+require_once PEG_PLUGIN_PATH.'class-ssl-enforcer.php';
 
 define('PEG_VERSION', '0.3');
 define('PEG_PHOTOSWIPE_VERSION', '4.0.8');
@@ -67,9 +68,14 @@ if(!class_exists( 'Photo_Express' )){
 			$this->configuration = new Settings_Storage();
 			$this->access = new Google_Photo_Access();
 			$this->cache = new Simple_Cache($this->configuration, $this->access);
+			$fetcher = $this->cache;
+			//Needs to be effective before the cache, because the result of the page is different depending on the protocol
+			if($this->configuration->get_option('peg_force_ssl')){
+				$fetcher = new SSL_Enforcer($fetcher);
+			}
 			$this->admin = new Settings($this->configuration, $this->access);
-			$this->browser = new Photo_Browser($this->configuration, $this->cache, $this->admin);
-			$this->display = new Photo_Renderer($this->configuration, $this->cache);
+			$this->browser = new Photo_Browser($this->configuration, $fetcher, $this->admin);
+			$this->display = new Photo_Renderer($this->configuration, $fetcher);
 
 			//Start hooking:
 			$this->hook_activation();
@@ -218,6 +224,14 @@ if(!class_exists( 'Photo_Express' )){
 
 	}
 }
-
+function convert_to_https($url){
+	if(!str_starts_with($url, "https") && str_starts_with($url, "http")){
+		$url = 'https'.substr($url,4);
+	}
+	return $url;
+}
+function str_starts_with($haystack, $needle){
+	return substr($haystack, 0, strlen($needle)) === $needle;
+}
 if (!isset($peg_instance)) $peg_instance = new Photo_Express();
 ?>

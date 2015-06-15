@@ -942,6 +942,9 @@ jQuery('document').ready(function(){
 			            '<input type="text" id="peg_cache_expiration_time" name="peg_general_settings[peg_cache_expiration_time]" value="'.$this->configuration->get_option('peg_cache_expiration_time').'" />'
 			            , __('The time in seconds after which a cached album feed should at least be refreshed. \'0\' means that album feeds do not need to be refreshed.', 'peg')
 		            );
+		            $this->make_settings_row(__('SSL','peg'),
+			            '<label><input type="checkbox" id="peg_force_ssl" name="peg_general_settings[peg_force_ssl]" value="1"' . checked($this->configuration->get_option('peg_force_ssl'), '1', false) . ' />' . __('Force SSL for all connections to Google Photos','peg') .'</label>',
+			            __('If activated, all requests to the google photo server will be send over SSL (https). If you disable this setting, your private access tokens for Google Photo will be send over an insecure connection to Google.'));
 		            ?>
 	            </table>
                 <h3><?php _e('Advertising', 'peg') ?></h3>

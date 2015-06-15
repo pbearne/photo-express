@@ -90,7 +90,9 @@ if (!class_exists("Settings_Storage")) {
 
 	        //Caching options
             'peg_cache_activated' => '1',
-            'peg_cache_expiration_time' => 0
+            'peg_cache_expiration_time' => 0,
+
+	        'peg_force_ssl' => '1'
 
         );
 	    private $migration_state = '';

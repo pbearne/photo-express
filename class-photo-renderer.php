@@ -1083,6 +1083,12 @@ if (!class_exists("Photo_Renderer")) {
                 $istyle = '';
             }
 
+	        //Force SSL if needed
+	        if($this->configuration->get_option('peg_force_ssl')){
+		        $a_href = convert_to_https($a_href);
+		        $thumb_src = convert_to_https($thumb_src);
+	        }
+
             // create the HTML for the image tag
             $html = "<img src=\"{$thumb_src}\" alt=\"{$alt}\" {$ititle}{$iclass}{$istyle}{$imore} />";
 

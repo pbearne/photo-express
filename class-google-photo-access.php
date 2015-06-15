@@ -363,8 +363,7 @@ if (!class_exists( "Google_Photo_Access" )) {
 		    // add Auth later
 		    $options = array(
 			    'timeout' => 30,
-			    'user-agent' => 'WordPress/' . $wp_version . '; ' . get_bloginfo( 'url' ),
-			    'sslverify' => false
+			    'user-agent' => 'WordPress/' . $wp_version . '; ' . get_bloginfo( 'url' )
 		    );
 
 		    $this->check_init();
