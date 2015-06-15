@@ -743,19 +743,7 @@ if (!class_exists("Photo_Renderer")) {
                                     $item['iorig'] = $item['ialbum'];
                                 }
 
-                                // determine if this particular link has been displayed
-                                // already or not (to prevent multiple copies related
-                                // to each other from busting the navigation)
-                                if (in_array($item['iorig'], $this->photos_displayed)) {
-                                    // this photo has already been displayed, skip relating
-                                    // it to the rest and instead make up a new relationship
-                                    // for it so that we don't break the navigation
-                                    $amore_this = str_replace($uniqid, uniqid(), $amore);
-                                } else {
-                                    // this photo hasn't been displayed yet, it can be related
-                                    // without issue
-                                    $amore_this = $amore;
-                                }
+                                $amore_this = $amore;
 
                                 // store this photo in our list of displayed photos
                                 $this->photos_displayed[] = $item['iorig'];
@@ -1317,10 +1305,15 @@ if (!class_exists("Photo_Renderer")) {
                             // get this rel and create the collection
 	                        initPhotoSwipeFromDOM(jQuery('a.photoswipe[rel=' + value + ']'),options)
                         });
+                        //Check if there are any images without any relation (i.e. single images)
+	                    jQuery('a.photoswipe:not([rel])').each(function(key, value){
+		                    initPhotoSwipeFromDOM(jQuery(this),options);
+	                    });
                     } else {
                         // we didn't get any rels, so attempt without rel checking
 	                    initPhotoSwipeFromDOM(jQuery('a.photoswipe'),options);
                     }
+
                 });
 
                 function peg_in_array(array, value) {
