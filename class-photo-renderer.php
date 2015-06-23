@@ -1252,7 +1252,7 @@ if (!class_exists("Photo_Renderer")) {
                 };
                 /* ]]> */
             </script>
-            <script src="<?= plugins_url('/thickbox-custom.js', __FILE__) ?>?ver=<?= peg_VERSION ?>"></script>
+            <script src="<?= plugins_url('/thickbox-custom.js', __FILE__) ?>?ver=<?= PEG_VERSION ?>"></script>
         <?php
         }// end function peg_add_custom_thickbox_config()
 
@@ -1261,11 +1261,11 @@ if (!class_exists("Photo_Renderer")) {
         function peg_add_photoswipe_script()
         {
             // add in the photoswipe script and related files
-            wp_enqueue_script('peg_photoswipe', plugins_url('/photoswipe/photoswipe.min.js', __FILE__), null, peg_PHOTOSWIPE_VERSION);
-            wp_enqueue_script('peg_photoswipe_ui', plugins_url('/photoswipe/photoswipe-ui-default.min.js', __FILE__), array('peg_photoswipe'), peg_PHOTOSWIPE_VERSION);
+            wp_enqueue_script('peg_photoswipe', plugins_url('/photoswipe/photoswipe.min.js', __FILE__), null, PEG_PHOTOSWIPE_VERSION);
+            wp_enqueue_script('peg_photoswipe_ui', plugins_url('/photoswipe/photoswipe-ui-default.min.js', __FILE__), array('peg_photoswipe'), PEG_PHOTOSWIPE_VERSION);
 	        wp_enqueue_script('peg_photoswipe_init', plugins_url('photoswipe-init.js', __FILE__),array('peg_photoswipe','peg_photoswipe_ui'),PEG_VERSION);
-            wp_enqueue_style('peg_photoswipe_css', plugins_url('/photoswipe/photoswipe.css', __FILE__), null, peg_PHOTOSWIPE_VERSION);
-	        wp_enqueue_style('peg_photoswipe_skin', plugins_url('/photoswipe/default-skin/default-skin.css', __FILE__), null, peg_PHOTOSWIPE_VERSION);
+            wp_enqueue_style('peg_photoswipe_css', plugins_url('/photoswipe/photoswipe.css', __FILE__), null, PEG_PHOTOSWIPE_VERSION);
+	        wp_enqueue_style('peg_photoswipe_skin', plugins_url('/photoswipe/default-skin/default-skin.css', __FILE__), null, PEG_PHOTOSWIPE_VERSION);
 
             // add the action to wp_footer to init photoswipe
             add_action('wp_footer', array(&$this, 'peg_init_photoswipe'));
