@@ -676,7 +676,7 @@ if (!class_exists("Photo_Renderer")) {
 
 
                             $url = Common::get_item_attr($item, 'media:thumbnail', 'url');
-                            $title = $this->configuration->parse_caption(Common::escape(Common::get_item($item, 'title')));
+                            $title = $this->configuration->parse_caption(Common::escape(Common::get_item($item, 'media:description')));
                             $picasa_link = Common::get_item($item, 'link');
 
                             //Calculate correct max width and height according to limits
