@@ -2,7 +2,7 @@
 Contributors: thhake, gjanes, wott
 Tags: google+, oauth, googleplus, google, picasaweb, picasa, phototile, tile, gallery, album, photo, photos, image, images, picture, pictures, video, videos, photoswipe, mobile, iphone, android, highslide, thickbox, lightbox, private, wpmu, user, blog, sitewide, multisite, post, shortcode, thumbnail
 Requires at least: 3.7
-Tested up to: 4.2.2
+Tested up to: 4.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -56,6 +56,8 @@ Features:
 *	Define **Roles** who are allowed to use the plugin
 *	Switch from blog to **user level** for storing the user and private access token
 *	Settings for single-image thumbnail size, single-video thumbnail size and large image size limit
+* Forcing SSL connection to the Google photo APIs
+* Optional caching of the Google photo API results
 
 **And by design:**
 
@@ -197,6 +199,11 @@ small-thumbnail gallery.
 * Embedded video support (currently doesn't appear to be allowed by Google)
 * Add the button to Visual toolbar of Tiny editor in full screen mode
 * Work with Google to correct tag searching index issues which cause tag searches to return unexpected results.
+
+= 0.3 =
+* Caching of Google Photo API requests has been implemented. It is enabled by default and can be deactivated in the settings. For more information about how caching works, please have a look at the "Advanced" section on the settings page.
+* SSL communication with the Google Photo API can now be enforced. This is enabled by default in order to improve security.
+* Fixed not displayed captions
 
 = 0.2 =
 * Multisite installation has been tested
@@ -392,6 +399,10 @@ Wordpress 3.2 fixes
 * First public release
 
 == Upgrade Notice ==
+
+= 0.3 =
+* From this version onwards, an SSL connection with the Google Photos API is enforced by default. You can change this on the settings page.
+* Caching of Google Photo API result (such as the list of photos in an album) is enabled by default. You can change this on the settings page.
 
 = 0.2 =
 * Photoswipe has been updated to version 4. If you are using the internal photoswipe you'll have to add an attribute "image_size" to each peg-image shorttag. Otherwise photoswipe won't work.
