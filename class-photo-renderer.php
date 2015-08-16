@@ -1154,14 +1154,14 @@ if (!class_exists("Photo_Renderer")) {
 						    $scale = $size / $image_height;
 						    if ( $scale < 1 ) {
 							    $image_height = $size;
-							    $image_width  = $image_width * $scale;
+							    $image_width  = round($image_width * $scale);
 						    }
 						    break;
 					    case 'w':
 						    $scale        = $size / $image_width;
 						    if($scale < 1){
 							    $image_width  = $size;
-							    $image_height = $scale * $image_height;
+							    $image_height = round($scale * $image_height);
 						    }
 						    break;
 					    default:
