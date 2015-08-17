@@ -1,9 +1,9 @@
 <?php
 namespace photo_express;
 
-require_once PEG_PLUGIN_PATH.'class-settings-storage.php';
-require_once PEG_PLUGIN_PATH.'class-common.php';
-require_once PEG_PLUGIN_PATH.'class-feed-fetcher.php';
+require_once plugin_dir_path(__FILE__).'class-settings-storage.php';
+require_once plugin_dir_path(__FILE__).'class-common.php';
+require_once plugin_dir_path(__FILE__).'class-feed-fetcher.php';
 
 if (!class_exists("Photo_Renderer")) {
     class Photo_Renderer

@@ -8,7 +8,7 @@
 
 namespace photo_express;
 
-require_once PEG_PLUGIN_PATH.'class-feed-fetcher.php';
+require_once plugin_dir_path(__FILE__).'class-feed-fetcher.php';
 
 class Simple_Cache {
 	/**

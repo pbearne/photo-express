@@ -146,6 +146,7 @@ if (!class_exists("Settings_Storage")) {
 				    $this->options[ $new_key ] = empty($old_value) ? $this->options[$new_key] : $old_value;
 			    }
 		    }
+
 		    //Migration for version 0.3
 		    if($old_version > 0.0 && $old_version < 0.3){
 			    //Check if we need to delete old options of our plugin (prefix peg).

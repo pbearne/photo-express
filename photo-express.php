@@ -3,7 +3,7 @@
 Plugin Name: Photo Express for Google
 Plugin URI: http://wordpress.org/extend/plugins/photo-express
 Description: Browse and select photos from any public or private Google+ album and add them to your posts/pages.
-Version: 0.3
+Version: 0.3.1
 Author: thhake
 Author URI: http://www.thorsten-hake.com
 Text Domain: peg
@@ -38,16 +38,16 @@ namespace photo_express;
 define('PEG_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
 
-require_once PEG_PLUGIN_PATH.'class-feed-fetcher.php';
-require_once PEG_PLUGIN_PATH.'class-google-photo-access.php';
-require_once PEG_PLUGIN_PATH.'class-settings-storage.php';
-require_once PEG_PLUGIN_PATH.'class-settings.php';
-require_once PEG_PLUGIN_PATH.'class-photo-renderer.php';
-require_once PEG_PLUGIN_PATH.'class-photo-browser.php';
-require_once PEG_PLUGIN_PATH.'class-simple-cache.php';
-require_once PEG_PLUGIN_PATH.'class-ssl-enforcer.php';
+require_once plugin_dir_path(__FILE__).'class-feed-fetcher.php';
+require_once plugin_dir_path(__FILE__).'class-google-photo-access.php';
+require_once plugin_dir_path(__FILE__).'class-settings-storage.php';
+require_once plugin_dir_path(__FILE__).'class-settings.php';
+require_once plugin_dir_path(__FILE__).'class-photo-renderer.php';
+require_once plugin_dir_path(__FILE__).'class-photo-browser.php';
+require_once plugin_dir_path(__FILE__).'class-simple-cache.php';
+require_once plugin_dir_path(__FILE__).'class-ssl-enforcer.php';
 
-define('PEG_VERSION', '0.3');
+define('PEG_VERSION', '0.3.1');
 define('PEG_PHOTOSWIPE_VERSION', '4.0.8');
 
 if(!class_exists( 'Photo_Express' )){

@@ -1,8 +1,8 @@
 <?php
 namespace photo_express;
-require_once PEG_PLUGIN_PATH.'class-google-photo-access.php';
-require_once PEG_PLUGIN_PATH.'class-settings-storage.php';
-require_once PEG_PLUGIN_PATH.'class-common.php';
+require_once plugin_dir_path(__FILE__).'class-google-photo-access.php';
+require_once plugin_dir_path(__FILE__).'class-settings-storage.php';
+require_once plugin_dir_path(__FILE__).'class-common.php';
 
 // ########################################################################
 if (!class_exists( "Settings" )) {

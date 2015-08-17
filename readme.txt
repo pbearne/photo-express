@@ -200,6 +200,10 @@ small-thumbnail gallery.
 * Add the button to Visual toolbar of Tiny editor in full screen mode
 * Work with Google to correct tag searching index issues which cause tag searches to return unexpected results.
 
+= 0.3.1 =
+* Fixed issue while uninstalling the plugin
+
+
 = 0.3 =
 * Caching of Google Photo API requests has been implemented. It is enabled by default and can be deactivated in the settings. For more information about how caching works, please have a look at the "Advanced" section on the settings page.
 * SSL communication with the Google Photo API can now be enforced. This is enabled by default in order to improve security.
