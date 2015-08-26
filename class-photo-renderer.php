@@ -676,8 +676,9 @@ if (!class_exists("Photo_Renderer")) {
 
 
                             $url = Common::get_item_attr($item, 'media:thumbnail', 'url');
-                            $title = $this->configuration->parse_caption(Common::escape(Common::get_item($item, 'media:description')));
-                            $picasa_link = Common::get_item($item, 'link');
+                            $title = $this->get_title($item);
+
+	                        $picasa_link = Common::get_item($item, 'link');
 
                             //Calculate correct max width and height according to limits
 	                        $image_width = Common::get_item($item, 'gphoto:width');
@@ -802,7 +803,13 @@ if (!class_exists("Photo_Renderer")) {
             return $code;
         }// end function gallery_shortcode(..)
 
-
+	    function get_title($item){
+		    $title = Common::escape(Common::get_item($item, 'media:description'));
+		    if(empty($title)){
+			    $title = Common::escape(Common::get_item($item, 'media:title'));
+		    }
+		    return $this->configuration->parse_caption($title);
+	    }
         /**
          * Callback function to assist with sorting the items array returned by
          * a "tag" search to Google+, ordering by EXIF photo taken date
