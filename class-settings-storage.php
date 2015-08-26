@@ -159,6 +159,8 @@ if (!class_exists("Settings_Storage")) {
 		    if($migrated) {
 			    //Store options
 			    $this->store();
+		    }
+		    if(!$this->is_migrated()){
 			    //Store the migrate flag
 			    update_option('peg_migrate_state', $this->get_version_identifier());
 		    }
