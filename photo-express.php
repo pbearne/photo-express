@@ -104,6 +104,9 @@ if(!class_exists( 'Photo_Express' )){
 			wp_die('<p>The <strong>Photo Express for Google</strong> plugin requires '.$flag.'  version '.$version.' or greater.</p>','Plugin Activation Error',  array( 'response'=>200, 'back_link'=>TRUE ) );
 		}
 		function hook_activation(){
+			// Hook option migration
+			add_action('plugins_loaded', array(&$this->configuration, 'migrate_if_possible'));
+
 			register_activation_hook(__FILE__, array(&$this, 'check_php_version'));
 			// Hook for plugin de/activation
 			if (is_multisite()){
