@@ -202,7 +202,9 @@ small-thumbnail gallery.
 
 = 0.3.1 =
 * Fixed issue while uninstalling the plugin
-
+* Fixed issues when upgrading the plugin
+* Fixed filename captions
+* Added a error msg when trying to activate the plugin with a not supported PHP version
 
 = 0.3 =
 * Caching of Google Photo API requests has been implemented. It is enabled by default and can be deactivated in the settings. For more information about how caching works, please have a look at the "Advanced" section on the settings page.
