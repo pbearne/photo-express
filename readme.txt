@@ -199,6 +199,8 @@ small-thumbnail gallery.
 * Embedded video support (currently doesn't appear to be allowed by Google)
 * Add the button to Visual toolbar of Tiny editor in full screen mode
 * Work with Google to correct tag searching index issues which cause tag searches to return unexpected results.
+= 0.3.3 =
+* Fixed missing jQuery dependency for photoswipe
 
 = 0.3.2 =
 * Fixed another issue while uninstalling
