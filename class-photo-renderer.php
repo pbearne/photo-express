@@ -1268,7 +1268,7 @@ if (!class_exists("Photo_Renderer")) {
         function peg_add_photoswipe_script()
         {
             // add in the photoswipe script and related files
-            wp_enqueue_script('peg_photoswipe', plugins_url('/photoswipe/photoswipe.min.js', __FILE__), null, PEG_PHOTOSWIPE_VERSION);
+	        wp_enqueue_script('peg_photoswipe', plugins_url('/photoswipe/photoswipe.min.js', __FILE__), array('jquery'), PEG_PHOTOSWIPE_VERSION);
             wp_enqueue_script('peg_photoswipe_ui', plugins_url('/photoswipe/photoswipe-ui-default.min.js', __FILE__), array('peg_photoswipe'), PEG_PHOTOSWIPE_VERSION);
 	        wp_enqueue_script('peg_photoswipe_init', plugins_url('photoswipe-init.js', __FILE__),array('peg_photoswipe','peg_photoswipe_ui'),PEG_VERSION);
             wp_enqueue_style('peg_photoswipe_css', plugins_url('/photoswipe/photoswipe.css', __FILE__), null, PEG_PHOTOSWIPE_VERSION);
