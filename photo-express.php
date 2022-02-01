@@ -246,9 +246,10 @@ if ( peg_is_php_supported() ) {
 
 		return $url;
 	}
-
-	function str_starts_with( $haystack, $needle ) {
-		return substr( $haystack, 0, strlen( $needle ) ) === $needle;
+	if( ! function_exists( 'str_starts_with' ) ){
+		function str_starts_with( $haystack, $needle ) {
+			return substr( $haystack, 0, strlen( $needle ) ) === $needle;
+		}
 	}
 
 	if ( ! isset( $peg_instance ) ) {
